@@ -1,0 +1,25 @@
+<app-beer-list-controls (UpdateFilter)="UpdateFilter($event)" (UpdatePage)="UpdatePage($event)"></app-beer-list-controls>
+<div class="row mx-auto">
+  <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12" *ngFor="let beer of beers">
+    <div class="wrapper">
+    <div class="card">
+      <div class="front">
+        <h2>{{ beer.name }}</h2>
+      </div>
+      <div class="right">
+        <h5>{{ beer.tagline }}</h5>
+        <ul>
+          <li>ABV: {{ beer.abv }}% </li>
+          <li>IBU: {{ beer.ibu }}</li>
+          <li>EBC: {{ beer.ebc }}</li>
+          <li>PH: {{ beer.ph }}</li>
+          <li>First Brewed: {{ beer.first_brewed}}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="img-wrapper">
+        <img src='{{ beer.image_url }}' onerror="this.src='https://lh6.googleusercontent.com/proxy/B98vak4HyrMSmACUPipeDwB9jobWDfwbqQ4PjqPmYvR4pK8SKWoZZfbuURguZ0ajuJymC75ECxiW9fPmrhm1Yx_Fq_S4gRDdetLycmazD5WKJCO41-4fmKnmjFHwFlSI4CzQwdFtfJADmFjlyICU3TEIcChERo0';" alt=''>    
+    </div>
+  </div>    
+  </div>
+</div>

@@ -1,0 +1,10 @@
+p {
+  font-family: Lato;
+}
+
+.navbar-brand
+{
+  font-family: 'Lato', sans-serif;
+  font-size: 26px;
+  margin: 2px;
+}
