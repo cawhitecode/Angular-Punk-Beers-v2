@@ -1,60 +1,165 @@
 
-import 'rxjs/add/operator/map';
-import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject, Observable } from "rxjs";
+
+export interface Beer {
+  abv: number;
+  ebc: number;
+  ibu: number;
+  ph: number;
+  name: string;
+  first_brewed: string;
+  image_url: string;
+  tageline: string;
+}
 
 @Injectable()
-export class BeerServiceService {
-APIPath: string = 'https://api.punkapi.com/v2/beers';
-  // Value of maxPerPage should be evenly divisable 2, 3, and 4... UI bootstrap
-  private maxPerPage: number = 36;
-  private currentFilter: number;
-  // Empty string to setup for API calls and cleaner/readable code
-  private apiString: any;
+export class BeerService {
+  private beers = new BehaviorSubject<Beer[]>(null);
+  beers$: Observable<Beer[]> = this.beers.asObservable();
+  private path = "https://api.punkapi.com/v2/beers"; // This should use Environment Variables
 
-  constructor(private http: Http) { }
-  
+  // Value of maxPerPage should be evenly divisable 2 and 3... UI bootstrap
+  private maxPerPage = 24;
+  private page = 1;
+  private filter = 0;
+  private apiPath = `${this.path}?page=${this.page}&per_page=${this.maxPerPage}`;
+
+  constructor(private http: HttpClient) {
+    this.goToPage();
+  }
+
+  goToPage(page = 1): void {
+    if (page < 1) {
+      // Default to page 1
+      page = 1;
+    }
+    this.page = page;
+
+    this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
+  }
+
+  // Current page increment up and Emits event UpdatePage with value of new page to query API
+  nextPage(): void {
+    this.page++;
+
+    this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
+  }
+
+  // Current page increment down and if less 1 sets page to 1, Emits event UpdatePage with value of new page to query API
+  prevPage(): void {
+    this.page--;
+
+    if (this.page < 1) {
+      // Default to page 1
+      this.page = 1;
+    }
+
+    this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
+  }
+   homePage(): void {
+    this.page = 1;
+    this.filter = 0;
+    this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
+  }
+
+  addFilter(filter = 0): void {
+    this.filter = filter;
+    this.page = 1;
+
+    this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
+  }
+
+  removeFilter(filter = 0): void {
+    this.filter = filter;
+    this.page = 1;
+
+    this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
+  }
+
+  addQueryFilter(item: any) {
+
+    switch (item.filter_id)
+    {
+      case 1:
+        this.addFilter(1);
+        break;
+      case 2:
+        this.addFilter(2);
+        break;
+      case 3:
+        this.addFilter(3);
+        break;
+      case 4:
+        this.addFilter(4);
+        break;
+      default:
+        console.log(item.filter_id);
+        break;
+    }
+    
+  }
+  removeQueryFilter(item: any) {
+    switch (item.filter_id)
+    {
+      case 1:
+        this.removeFilter(101);
+        break;
+      case 2:
+        this.removeFilter(102);
+        break;
+      case 3:
+        this.removeFilter(103);
+        break;
+      case 4:
+        this.removeFilter(104);
+        break;
+      default:
+        this.homePage();
+        break;
+    }
+    
+  }
+
   // Select what page and filter to apply to query then get from API string
-  // 0 = 5% ABV or LESS
   // 1 = 5% ABV or GREATER
+  // 2 = 5% ABV or LESS
   // Any other number not assigned will return all beers
   // Page number is set up to save what page the client is on and return page based prev/next page
-  public GetBeersPage(page: number = 1, currentFilter){
-    if (currentFilter == 0){      
-      this.GetLess5ABVBeers(page);
-      return this.apiString;
-    }
-    else if (currentFilter == 1){      
-      this.GetGreater5ABVBeers(page);
-      return this.apiString;
-    }
-    else
-    {
-      this.GetAllBeers(page);
-      return this.apiString;
-    }
-  }
+  private APIPath(): string {
+    let apiTempPath = `${this.path}?page=${this.page}&per_page=${this.maxPerPage}`;
+    switch (this.filter) {
+      case 0:
+        this.apiPath = `${this.path}?page=${this.page}&per_page=${this.maxPerPage}`;
+        return this.apiPath;
+      case 1:
+        this.apiPath = this.apiPath + "&abv_gt=5";
+          return this.apiPath;
+      case 2:
+        this.apiPath = this.apiPath + "&abv_lt=5"      
+          return this.apiPath;
+      case 3:
+        this.apiPath = this.apiPath + "&ibu_gt=50";
+          return this.apiPath;
+      case 4:
+        this.apiPath = this.apiPath + "&ibu_lt=50";
+          return this.apiPath;
 
-  // Sets Filter based on what client selects(button)
-  private SetFilter(changeFilter: number){
-    this.currentFilter = changeFilter;
+      case 101:
+        this.apiPath = this.apiPath.replace("&abv_gt=5", "");
+          return this.apiPath;
+      case 102:
+        this.apiPath = this.apiPath.replace("&abv_lt=5", "");
+          return this.apiPath;
+      case 103:
+        this.apiPath = this.apiPath.replace("&ibu_gt=50", "");
+          return this.apiPath;
+      case 104:
+        this.apiPath = this.apiPath.replace("&ibu_lt=50", "");
+          return this.apiPath;
+      default:
+        return this.apiPath;
+    }
   }
-  
-  // GET
-    // All beers set to apiString
-  private GetAllBeers(page: number = 1) {    
-    this.apiString = this.http.get(`${this.APIPath}?page=${page}&per_page=${this.maxPerPage}`)
-      .map((res: Response) => res.json());
-  }
-    // All beers GREATER than 5, set to apiString abv_gt= is query
-  private GetGreater5ABVBeers(page: number = 1) {
-    this.apiString =  this.http.get(`${this.APIPath}?abv_gt=5&page=${page}&per_page=${this.maxPerPage}`)
-      .map((res: Response) => res.json());
-  }
-    // All beers LESS than 5, set to apiString abv_lt= is query
-  private GetLess5ABVBeers(page: number = 1) {
-    this.apiString =  this.http.get(`${this.APIPath}?abv_lt=5&page=${page}&per_page=${this.maxPerPage}`)
-      .map((res: Response) => res.json());
-  }
-
 }

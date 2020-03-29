@@ -1,4 +1,8 @@
 /* Add application styles & imports to this file! */
 body {
-  background-image: #ffffff;
+  background-image: url("https://images.unsplash.com/flagged/photo-1575451531847-24ccf28a2715?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2134&q=80");
+  background-repeat:no-repeat;
+  background: fill;
+  background-attachment: fixed;
+  background-size: cover;
 }
