@@ -1,21 +1,24 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http'
+import { HttpClientModule } from '@angular/common/http';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 import { AppComponent } from './app.component';
 import { BeerComponent } from './beer.component';
-import { BeerServiceService } from './services/beer-service.service';
+import { BeerService } from './services/beer-service.service';
 import { BeerListComponent } from './components/beer-list/beer-list.component';
-import { BeerListControlsComponent } from './components/beer-list-controls/beer-list-controls.component';
+import { BeerListPageControlsComponent } from './components/beer-list-page-controls/beer-list-page-controls.component';
+import { BeerEmptyComponent } from './components/beer-empty/beer-empty.component';
+import { BeerFiltersComponent } from './components/beer-filters/beer-filters.component';
 
 
 
 
 @NgModule({
-  imports:      [ HttpModule, BrowserModule, FormsModule ],
-  declarations: [ AppComponent, BeerComponent, BeerListComponent, BeerListControlsComponent ],
+  imports:      [ HttpClientModule, BrowserModule, FormsModule, NgMultiSelectDropDownModule.forRoot() ],
+  declarations: [ AppComponent, BeerComponent, BeerListComponent, BeerListPageControlsComponent, BeerEmptyComponent, BeerFiltersComponent ],
   bootstrap:    [ AppComponent ],
-  providers: [BeerServiceService]
+  providers: [BeerService]
 })
 export class AppModule { }
