@@ -14,6 +14,26 @@ export interface Beer {
   tageline: string;
 }
 
+export class BeerFiltersSettings {
+  dropdownList: [
+      { filter_id: 1, item_text: 'ABV > 5' },
+      { filter_id: 2, item_text: 'ABV < 5' },
+      { filter_id: 3, item_text: 'IBU > 50' },
+      { filter_id: 4, item_text: 'IBU < 50' }
+    ];
+    selectedItems: [
+    ];
+    dropdownSettings: {
+      singleSelection: false,
+      idField: 'filter_id',
+      textField: 'item_text',
+      enableCheckAll: false,
+      itemsShowLimit: 5,
+      allowSearchFilter: false
+    };
+
+}
+
 @Injectable()
 export class BeerService {
   private beers = new BehaviorSubject<Beer[]>(null);
@@ -161,5 +181,12 @@ export class BeerService {
       default:
         return this.apiPath;
     }
+  }
+  initializeBeerFiltersClass(dropdownList, selectedItems, dropdownSettings){
+    let beerFiltersSettings = new BeerFiltersSettings();
+    dropdownList = beerFiltersSettings.dropdownList;
+    selectedItems = beerFiltersSettings.selectedItems;
+    dropdownSettings = beerFiltersSettings.dropdownSettings;
+    console.log(beerFiltersSettings.dropdownList[1]);
   }
 }
