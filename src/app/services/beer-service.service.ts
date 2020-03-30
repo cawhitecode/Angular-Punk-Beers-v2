@@ -95,7 +95,7 @@ export class BeerService {
     this.filter = filter;
     this.page = 1;
 
-    this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
+    this.http.get<Beer[]>(this.APIPathRemove()).subscribe(v => this.beers.next(v));
   }
 
   addQueryFilter(item: any) {
@@ -165,7 +165,16 @@ export class BeerService {
       case 4:
         this.apiPath = this.apiPath + "&ibu_lt=50";
           return this.apiPath;
+      default:
+        return this.apiPath;
+    }
+  }
 
+  // Removing query params from APIPath string -- Opposite of APIPath
+  // Each case is 10 + filter. I.e. Add 100.
+  private APIPathRemove(): string {
+    let apiTempPath = `${this.path}?page=${this.page}&per_page=${this.maxPerPage}`;
+    switch (this.filter) {    
       case 101:
         this.apiPath = this.apiPath.replace("&abv_gt=5", "");
           return this.apiPath;
