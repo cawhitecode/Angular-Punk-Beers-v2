@@ -10,7 +10,8 @@ import { BeerService, BeerFiltersSettings } from '../../services/beer-service.se
 })
 export class BeerFiltersComponent implements OnInit { 
   constructor(private beerService: BeerService) {}
-
+  
+  beerFiltersSettings = new BeerFiltersSettings();
   dropdownList = [];
   selectedItems = [];
   dropdownSettings = {};
@@ -18,27 +19,11 @@ export class BeerFiltersComponent implements OnInit {
   
 
   ngOnInit() {
-    // let beerFiltersSettings = new BeerFiltersSettings();
-    this.dropdownList = [
-      { filter_id: 1, item_text: 'ABV > 5' },
-      { filter_id: 2, item_text: 'ABV < 5' },
-      { filter_id: 3, item_text: 'IBU > 50' },
-      { filter_id: 4, item_text: 'IBU < 50' }
-    ];
-
-    this.selectedItems = [
-    ];
-    
-    this.dropdownSettings = {
-      singleSelection: false,
-      idField: 'filter_id',
-      textField: 'item_text',
-      enableCheckAll: false,
-      itemsShowLimit: 5,
-      allowSearchFilter: false
-    };
-    this.beerService.initializeBeerFiltersClass(this.dropdownList, this.selectedItems, this.dropdownSettings);
+    this.dropdownList = this.beerFiltersSettings.dropdownList;
+    this.selectedItems = this.beerFiltersSettings.selectedItems;
+    this.dropdownSettings = this.beerFiltersSettings.dropdownSettings;
   }
+  
   onItemSelect(item: any) {
     this.beerService.addQueryFilter(item);
   }

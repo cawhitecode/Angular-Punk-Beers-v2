@@ -1,5 +1,4 @@
 <div class ="mx-auto marginTop col-sm-8">
-
 <ng-multiselect-dropdown
   [placeholder]="'No Filter Selected'"
   [data]="dropdownList"
@@ -7,6 +6,7 @@
   [settings]="dropdownSettings"
   (onSelect)="onItemSelect($event)"
   (onDeSelect)="onItemDeSelect($event)"
+  (onDeSelectAll)="homePage()"
 >
 </ng-multiselect-dropdown>
 </div>

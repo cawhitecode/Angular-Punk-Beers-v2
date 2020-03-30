@@ -15,15 +15,15 @@ export interface Beer {
 }
 
 export class BeerFiltersSettings {
-  dropdownList: [
+  dropdownList = [
       { filter_id: 1, item_text: 'ABV > 5' },
       { filter_id: 2, item_text: 'ABV < 5' },
       { filter_id: 3, item_text: 'IBU > 50' },
       { filter_id: 4, item_text: 'IBU < 50' }
     ];
-    selectedItems: [
+    selectedItems = [
     ];
-    dropdownSettings: {
+    dropdownSettings = {
       singleSelection: false,
       idField: 'filter_id',
       textField: 'item_text',
@@ -190,12 +190,5 @@ export class BeerService {
       default:
         return this.apiPath;
     }
-  }
-  initializeBeerFiltersClass(dropdownList, selectedItems, dropdownSettings){
-    let beerFiltersSettings = new BeerFiltersSettings();
-    dropdownList = beerFiltersSettings.dropdownList;
-    selectedItems = beerFiltersSettings.selectedItems;
-    dropdownSettings = beerFiltersSettings.dropdownSettings;
-    console.log(beerFiltersSettings.dropdownList[1]);
   }
 }
