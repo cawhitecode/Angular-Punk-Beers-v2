@@ -1,7 +1,8 @@
 
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, merge, interval  } from "rxjs";
+import { take } from 'rxjs/operators';
 
 export interface Beer {
   abv: number;
@@ -41,10 +42,10 @@ export class BeerService {
   private path = "https://api.punkapi.com/v2/beers"; // This should use Environment Variables
 
   // Value of maxPerPage should be evenly divisable 2 and 3... UI bootstrap
-  private maxPerPage = 24;
+  private maxPerLoad = 24;
   private page = 1;
   private filter = 0;
-  private apiPath = `${this.path}?page=${this.page}&per_page=${this.maxPerPage}`;
+  private apiPath = `${this.path}?page=${this.page}&per_page=${this.maxPerLoad}`;
     
 
   constructor(private http: HttpClient) {
@@ -64,6 +65,23 @@ export class BeerService {
   // Current page increment up and Emits event UpdatePage with value of new page to query API
   nextPage(): void {
     this.page++;
+
+    this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
+  }
+
+  // Current page increment up and Emits event UpdatePage with value of new page to query API
+  nextBeerLoad(): void {
+    if (this.maxPerLoad > 71){
+      const beersAPIFirstPage = this.http.get<Beer[]>(this.APIPath()).pipe(take(48));
+      this.page++;
+      const beersAPISecondPage =  this.http.get<Beer[]>(this.APIPath()).pipe(take(48));
+      const merged = merge(beersAPISecondPage, beersAPIFirstPage, 2);
+      merged.subscribe(v => this.beers.next(v));
+      this.maxPerLoad = 24;
+
+    } else {
+      this.maxPerLoad = this.maxPerLoad + 24;
+    }
 
     this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
   }
@@ -157,7 +175,7 @@ export class BeerService {
   private APIPath(): string {
     switch (this.filter) {
       case 0:
-        this.apiPath = `${this.path}?page=${this.page}&per_page=${this.maxPerPage}`;
+        this.apiPath = `${this.path}?page=${this.page}&per_page=${this.maxPerLoad}`;
         return this.apiPath;
       case 1:
         this.apiPath = this.apiPath + "&abv_gt=5";
