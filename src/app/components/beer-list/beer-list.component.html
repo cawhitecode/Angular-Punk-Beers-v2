@@ -1,4 +1,4 @@
-<app-beer-filters></app-beer-filters>
+<app-beer-filters #filters></app-beer-filters>
 <app-beer-list-page-controls></app-beer-list-page-controls>
 <div *ngIf="(beers$ | async)?.length > 0; else noBeers">
   <div class="row mx-auto">
@@ -28,5 +28,5 @@
   <app-beer-list-page-controls></app-beer-list-page-controls>
 </div>
 <ng-template #noBeers>
-  <app-beer-empty></app-beer-empty>
+  <app-beer-empty [filters]="filters"></app-beer-empty>
 </ng-template>

@@ -10,7 +10,8 @@ import { Observable } from 'rxjs';
 export class BeerListComponent {
   beers$: Observable<Beer[]>;
 
-  constructor(beerService: BeerService) { 
+  constructor(beerService: BeerService) {
+    // Beers array from service
     this.beers$ = beerService.beers$;
   }
 }

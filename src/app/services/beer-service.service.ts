@@ -45,6 +45,7 @@ export class BeerService {
   private page = 1;
   private filter = 0;
   private apiPath = `${this.path}?page=${this.page}&per_page=${this.maxPerPage}`;
+    
 
   constructor(private http: HttpClient) {
     this.goToPage();
@@ -78,27 +79,16 @@ export class BeerService {
 
     this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
   }
-   homePage(): void {
+
+  // Resets filter to 0 and by APIpath resets query string
+  homePage(): void {
     this.page = 1;
     this.filter = 0;
     this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
   }
-
-  addFilter(filter = 0): void {
-    this.filter = filter;
-    this.page = 1;
-
-    this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
-  }
-
-  removeFilter(filter = 0): void {
-    this.filter = filter;
-    this.page = 1;
-
-    this.http.get<Beer[]>(this.APIPathRemove()).subscribe(v => this.beers.next(v));
-  }
-
-  addQueryFilter(item: any) {
+  
+  // Adds query string based on filter input
+  public addQueryFilter(item: any) {
 
     switch (item.filter_id)
     {
@@ -120,7 +110,9 @@ export class BeerService {
     }
     
   }
-  removeQueryFilter(item: any) {
+
+  // Removes query string based on filter input
+  public removeQueryFilter(item: any) {
     switch (item.filter_id)
     {
       case 1:
@@ -141,6 +133,21 @@ export class BeerService {
     }
     
   }
+  // Applies filter to api string then gets beers associated
+  private addFilter(filter = 0): void {
+    this.filter = filter;
+    this.page = 1;
+
+    this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
+  }
+  
+  // Removes filter to api string then gets beers associated
+  private removeFilter(filter = 0): void {
+    this.filter = filter;
+    this.page = 1;
+
+    this.http.get<Beer[]>(this.APIPathRemove()).subscribe(v => this.beers.next(v));
+  }
 
   // Select what page and filter to apply to query then get from API string
   // 1 = 5% ABV or GREATER
@@ -148,7 +155,6 @@ export class BeerService {
   // Any other number not assigned will return all beers
   // Page number is set up to save what page the client is on and return page based prev/next page
   private APIPath(): string {
-    let apiTempPath = `${this.path}?page=${this.page}&per_page=${this.maxPerPage}`;
     switch (this.filter) {
       case 0:
         this.apiPath = `${this.path}?page=${this.page}&per_page=${this.maxPerPage}`;
@@ -173,7 +179,6 @@ export class BeerService {
   // Removing query params from APIPath string -- Opposite of APIPath
   // Each case is 10 + filter. I.e. Add 100.
   private APIPathRemove(): string {
-    let apiTempPath = `${this.path}?page=${this.page}&per_page=${this.maxPerPage}`;
     switch (this.filter) {    
       case 101:
         this.apiPath = this.apiPath.replace("&abv_gt=5", "");

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { BeerService, BeerFiltersSettings } from '../../services/beer-service.service';
 
@@ -8,20 +8,23 @@ import { BeerService, BeerFiltersSettings } from '../../services/beer-service.se
   templateUrl: './beer-filters.component.html',
   styleUrls: ['./beer-filters.component.css']
 })
-export class BeerFiltersComponent implements OnInit { 
-  constructor(private beerService: BeerService) {}
-  
-  beerFiltersSettings = new BeerFiltersSettings();
-  dropdownList = [];
-  selectedItems = [];
-  dropdownSettings = {};
+export class BeerFiltersComponent implements OnInit {
 
-  
+  // New Object from beer-service - BeerFiltersSettings - Default no Selected
+  beerFiltersSettings = new BeerFiltersSettings();
+
+  // Values to initialize multi-select options
+  public dropdownList = [];
+  public selectedItems = [];
+  public dropdownSettings = {};  
+
+  constructor(private beerService: BeerService) {}
 
   ngOnInit() {
+    // Uses beerFiltersSettings to setup multi-select
     this.dropdownList = this.beerFiltersSettings.dropdownList;
     this.selectedItems = this.beerFiltersSettings.selectedItems;
-    this.dropdownSettings = this.beerFiltersSettings.dropdownSettings;
+    this.dropdownSettings = this.beerFiltersSettings.dropdownSettings;    
   }
   
   onItemSelect(item: any) {
@@ -30,5 +33,5 @@ export class BeerFiltersComponent implements OnInit {
 
   onItemDeSelect(item: any) {
     this.beerService.removeQueryFilter(item);
-  }
+  }  
 }

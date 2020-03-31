@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { BeerService } from '../../services/beer-service.service';
+import { BeerFiltersComponent } from '../beer-filters/beer-filters.component';
+
 
 
 @Component({
@@ -9,11 +11,14 @@ import { BeerService } from '../../services/beer-service.service';
 })
 export class BeerEmptyComponent implements OnInit {
 
+  @Input() filters: BeerFiltersComponent;  
+
   constructor(private beerService: BeerService) {}
 
   ngOnInit() {
   }
-  homePage() {
+  homePage() {    
+    this.filters.selectedItems = [];
     this.beerService.homePage();
-  }
+  }  
 }
