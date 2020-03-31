@@ -10,7 +10,7 @@ import { InfiniteScrollComponent } from './components/infinite-scroll/infinite-s
 import { BeerComponent } from './beer.component';
 import { BeerService } from './services/beer-service.service';
 import { BeerListComponent } from './components/beer-list/beer-list.component';
-import { BeerListPageControlsComponent } from './components/beer-list-page-controls/beer-list-page-controls.component';
+
 import { BeerEmptyComponent } from './components/beer-empty/beer-empty.component';
 import { BeerFiltersComponent } from './components/beer-filters/beer-filters.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -20,7 +20,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   imports:      [ HttpClientModule, BrowserModule, FormsModule, NgMultiSelectDropDownModule.forRoot(), InfiniteScrollModule ],
-  declarations: [ AppComponent, BeerComponent, BeerListComponent, BeerListPageControlsComponent, BeerEmptyComponent, BeerFiltersComponent, InfiniteScrollComponent ],
+  declarations: [ AppComponent, BeerComponent, BeerListComponent, BeerEmptyComponent, BeerFiltersComponent, InfiniteScrollComponent ],
   bootstrap:    [ AppComponent ],
   providers: [BeerService]
 })
