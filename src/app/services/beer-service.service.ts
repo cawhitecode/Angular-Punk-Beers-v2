@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, Observable, merge, interval  } from "rxjs";
 import { take } from 'rxjs/operators';
+import {concat} from "rxjs/observable/concat";
 
 export interface Beer {
   abv: number;
@@ -42,9 +43,10 @@ export class BeerService {
   private path = "https://api.punkapi.com/v2/beers"; // This should use Environment Variables
 
   // Value of maxPerPage should be evenly divisable 2 and 3... UI bootstrap
-  private maxPerLoad = 24;
+  private maxPerLoad = 12;
   private page = 1;
   private filter = 0;
+  private pageFilter = 1;
   private apiPath = `${this.path}?page=${this.page}&per_page=${this.maxPerLoad}`;
     
 
@@ -62,40 +64,15 @@ export class BeerService {
     this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
   }
 
-  // Current page increment up and Emits event UpdatePage with value of new page to query API
-  nextPage(): void {
-    this.page++;
-
-    this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
-  }
-
-  // Current page increment up and Emits event UpdatePage with value of new page to query API
+  // Loads More Beer by adding 12 until max of 72 beers
   nextBeerLoad(): void {
-    if (this.maxPerLoad > 71){
-      const beersAPIFirstPage = this.http.get<Beer[]>(this.APIPath()).pipe(take(48));
-      this.page++;
-      const beersAPISecondPage =  this.http.get<Beer[]>(this.APIPath()).pipe(take(48));
-      const merged = merge(beersAPISecondPage, beersAPIFirstPage, 2);
-      merged.subscribe(v => this.beers.next(v));
-      this.maxPerLoad = 24;
+    if (this.maxPerLoad == 72){
+      this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
 
     } else {
-      this.maxPerLoad = this.maxPerLoad + 24;
+      this.maxPerLoad = this.maxPerLoad + 12;
+      this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
     }
-
-    this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
-  }
-
-  // Current page increment down and if less 1 sets page to 1, Emits event UpdatePage with value of new page to query API
-  prevPage(): void {
-    this.page--;
-
-    if (this.page < 1) {
-      // Default to page 1
-      this.page = 1;
-    }
-
-    this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
   }
 
   // Resets filter to 0 and by APIpath resets query string
@@ -153,8 +130,7 @@ export class BeerService {
   }
   // Applies filter to api string then gets beers associated
   private addFilter(filter = 0): void {
-    this.filter = filter;
-    this.page = 1;
+    this.filter = filter;    
 
     this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
   }
@@ -162,7 +138,6 @@ export class BeerService {
   // Removes filter to api string then gets beers associated
   private removeFilter(filter = 0): void {
     this.filter = filter;
-    this.page = 1;
 
     this.http.get<Beer[]>(this.APIPathRemove()).subscribe(v => this.beers.next(v));
   }
