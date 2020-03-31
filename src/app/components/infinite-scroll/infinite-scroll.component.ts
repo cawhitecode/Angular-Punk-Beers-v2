@@ -19,13 +19,13 @@ export class InfiniteScrollComponent implements OnInit {
   }
 
   onScrollDown() {
-    console.log('loading');
     this.NextLoad();
   }
+
+  // Loads more beer by calling API and Increasing maxPerPage
   NextLoad() {
     this.currentPage++;   
     this.beerService.nextBeerLoad();
-    console.log(this.currentPage);
   }
   
 }
