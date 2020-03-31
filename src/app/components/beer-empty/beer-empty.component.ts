@@ -17,7 +17,8 @@ export class BeerEmptyComponent implements OnInit {
 
   ngOnInit() {
   }
-  homePage() {    
+  homePage() {
+    // Resets filter select items because drunk
     this.filters.selectedItems = [];
     this.beerService.homePage();
   }  
