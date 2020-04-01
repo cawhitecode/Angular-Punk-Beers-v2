@@ -85,50 +85,14 @@ export class BeerService {
   
   // Adds query string based on filter input
   public addQueryFilter(item: any) {
-
-    switch (item.filter_id)
-    {
-      case 1:
-        this.addFilter(1);
-        break;
-      case 2:
-        this.addFilter(2);
-        break;
-      case 3:
-        this.addFilter(3);
-        break;
-      case 4:
-        this.addFilter(4);
-        break;
-      default:
-        console.log(item.filter_id);
-        break;
-    }
-    
+    this.addFilter(item.filter_id);    
   }
 
   // Removes query string based on filter input
   public removeQueryFilter(item: any) {
-    switch (item.filter_id)
-    {
-      case 1:
-        this.removeFilter(101);
-        break;
-      case 2:
-        this.removeFilter(102);
-        break;
-      case 3:
-        this.removeFilter(103);
-        break;
-      case 4:
-        this.removeFilter(104);
-        break;
-      default:
-        this.homePage();
-        break;
-    }
-    
+    this.removeFilter(item.filter_id);    
   }
+
   // Applies filter to api string then gets beers associated
   private addFilter(filter = 0): void {
     this.filter = filter;    
@@ -156,78 +120,80 @@ export class BeerService {
         return this.apiPath;
 
       case 1:
-        if (this.apiPath.includes(this.queryParams[0]))
+        if (this.CheckStringForQueryParams(this.filter))
         {
           this.APIPathConcat(tempApiPath);
           return this.apiPath;
-        }
-        this.apiPath = this.apiPath + this.queryParams[0];
+        } else {
+          this.apiPath = this.apiPath + this.queryParams[0];
           return this.apiPath;
+        }
 
       case 2:
-        if (this.apiPath.includes(this.queryParams[1]))
+        if (this.CheckStringForQueryParams(this.filter))
         {
           this.APIPathConcat(tempApiPath);
           return this.apiPath;
-        }
-        this.apiPath = this.apiPath + this.queryParams[1];
+        } else {
+          this.apiPath = this.apiPath + this.queryParams[1];
           return this.apiPath;
-
+        }
       case 3:
-        if (this.apiPath.includes(this.queryParams[2]))
+        if (this.CheckStringForQueryParams(this.filter))
           {
             this.APIPathConcat(tempApiPath);
             return this.apiPath;
-          }
+          } else {
           this.apiPath = this.apiPath + this.queryParams[2];
           return this.apiPath;
+          };
 
       case 4:
-        if (this.apiPath.includes(this.queryParams[3]))
+        if (this.CheckStringForQueryParams(this.filter))
           {
             this.APIPathConcat(tempApiPath);
             return this.apiPath;
-          }      
+          } else {
           this.apiPath = this.apiPath + this.queryParams[3];
-            return this.apiPath;
+          return this.apiPath;
+          }
+
       default:      
         return this.apiPath;
     }
   }
 
-  // Removing query params from APIPath string -- Opposite of APIPath
-  // Each case is 10 + filter. I.e. Add 100.
+  // Removing query params from APIPath string -- Removing filter minus 101 to align with queryParams Array
   private APIPathRemove(): string {
-    switch (this.filter) {    
-      case 101:
-        this.apiPath = this.apiPath.replace("&abv_gt=5", "");
-          return this.apiPath;
-      case 102:
-        this.apiPath = this.apiPath.replace("&abv_lt=5", "");
-          return this.apiPath;
-      case 103:
-        this.apiPath = this.apiPath.replace("&ibu_gt=50", "");
-          return this.apiPath;
-      case 104:
-        this.apiPath = this.apiPath.replace("&ibu_lt=50", "");
-          return this.apiPath;
-      default:
-        return this.apiPath;
-    }
+    this.RemoveFilterBasedOnFilterNumber(this.filter);
+    return this.apiPath;
   }
+
+  // Concat together apiPath string based on per_page= then add on substring after number per page.
   private APIPathConcat(tempApiPath: string) {
     let indexOfPage = this.apiPath.indexOf('per_page=');
         this.apiPath = tempApiPath + this.maxPerLoad + this.apiPath.substring(indexOfPage + 11, this.apiPath.length);
   }
-  private containsQueryParams(apiPathString: string, query: number): boolean {
-    query - 1;
-    apiPathString.includes(this.queryParams[query])
-    return apiPathString.includes(this.queryParams[query])
 
+  // This checks for the filter based on the index of queryParams which is offset by one of filter
+  private CheckStringForQueryParams(filter: number) : boolean {
+      return this.apiPath.includes(this.queryParams[filter - 1]);
+    }
+
+  // Removes filter based on filter input in correlation to queryParams
+  private RemoveFilterBasedOnFilterNumber(filter: number) {
+    this.apiPath = this.apiPath.replace(this.queryParams[this.filter - 1], "");
   }
 
-private tempMethod2(tempApiPath: string) {
-    this.APIPathConcat(tempApiPath);
-    return this.apiPath;
+  // Function that will be used to refactor APIpath()
+  private UnholyFunctionOfDoom(filter: number){
+    let tempApiPath = `${this.path}?page=${this.page}&per_page=`;
+    if (this.CheckStringForQueryParams(filter))
+    {
+      this.APIPathConcat(tempApiPath);
+    } else {
+          this.apiPath = this.apiPath + this.queryParams[1];
+    }
   }
+
 }
