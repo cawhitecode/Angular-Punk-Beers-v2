@@ -46,8 +46,8 @@ export class BeerService {
   private maxPerLoad = 12;
   private page = 1;
   private filter = 0;
-  private pageFilter = 1;
-  private apiPath = `${this.path}?page=${this.page}&per_page=${this.maxPerLoad}`;
+  private apiPath = `${this.path}?page=${this.page}&per_page=`;
+  private queryParams = [ '&abv_gt=5', '&abv_lt=5', '&ibu_gt=50', '&ibu_lt=50'];
     
 
   constructor(private http: HttpClient) {
@@ -79,6 +79,7 @@ export class BeerService {
   homePage(): void {
     this.page = 1;
     this.filter = 0;
+    this.maxPerLoad = 12;
     this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
   }
   
@@ -148,23 +149,48 @@ export class BeerService {
   // Any other number not assigned will return all beers
   // Page number is set up to save what page the client is on and return page based prev/next page
   private APIPath(): string {
+    let tempApiPath = `${this.path}?page=${this.page}&per_page=`
     switch (this.filter) {
       case 0:
-        this.apiPath = `${this.path}?page=${this.page}&per_page=${this.maxPerLoad}`;
+        this.apiPath = `${tempApiPath}${this.maxPerLoad}`;
         return this.apiPath;
+
       case 1:
-        this.apiPath = this.apiPath + "&abv_gt=5";
+        if (this.apiPath.includes(this.queryParams[0]))
+        {
+          this.APIPathConcat(tempApiPath);
           return this.apiPath;
+        }
+        this.apiPath = this.apiPath + this.queryParams[0];
+          return this.apiPath;
+
       case 2:
-        this.apiPath = this.apiPath + "&abv_lt=5"      
+        if (this.apiPath.includes(this.queryParams[1]))
+        {
+          this.APIPathConcat(tempApiPath);
           return this.apiPath;
+        }
+        this.apiPath = this.apiPath + this.queryParams[1];
+          return this.apiPath;
+
       case 3:
-        this.apiPath = this.apiPath + "&ibu_gt=50";
+        if (this.apiPath.includes(this.queryParams[2]))
+          {
+            this.APIPathConcat(tempApiPath);
+            return this.apiPath;
+          }
+          this.apiPath = this.apiPath + this.queryParams[2];
           return this.apiPath;
+
       case 4:
-        this.apiPath = this.apiPath + "&ibu_lt=50";
-          return this.apiPath;
-      default:
+        if (this.apiPath.includes(this.queryParams[3]))
+          {
+            this.APIPathConcat(tempApiPath);
+            return this.apiPath;
+          }      
+          this.apiPath = this.apiPath + this.queryParams[3];
+            return this.apiPath;
+      default:      
         return this.apiPath;
     }
   }
@@ -188,5 +214,20 @@ export class BeerService {
       default:
         return this.apiPath;
     }
+  }
+  private APIPathConcat(tempApiPath: string) {
+    let indexOfPage = this.apiPath.indexOf('per_page=');
+        this.apiPath = tempApiPath + this.maxPerLoad + this.apiPath.substring(indexOfPage + 11, this.apiPath.length);
+  }
+  private containsQueryParams(apiPathString: string, query: number): boolean {
+    query - 1;
+    apiPathString.includes(this.queryParams[query])
+    return apiPathString.includes(this.queryParams[query])
+
+  }
+
+private tempMethod2(tempApiPath: string) {
+    this.APIPathConcat(tempApiPath);
+    return this.apiPath;
   }
 }
