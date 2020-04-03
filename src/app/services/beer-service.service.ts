@@ -108,57 +108,20 @@ export class BeerService {
   }
 
   // Select what page and filter to apply to query then get from API string
+  // 0 = No filter and loads 
   // 1 = 5% ABV or GREATER
   // 2 = 5% ABV or LESS
+  // 3 = 50 IBU or GREATER
+  // 4 = 50 IBU or LESS
   // Any other number not assigned will return all beers
   // Page number is set up to save what page the client is on and return page based prev/next page
   private APIPath(): string {
     let tempApiPath = `${this.path}?page=${this.page}&per_page=`
-    switch (this.filter) {
-      case 0:
-        this.apiPath = `${tempApiPath}${this.maxPerLoad}`;
+    if (this.filter == 0 || this.filter > 4){
+      this.apiPath = `${tempApiPath}${this.maxPerLoad}`;
         return this.apiPath;
-
-      case 1:
-        if (this.CheckStringForDoubleQueryParams(this.filter))
-        {
-          this.APIPathConcat(tempApiPath);
-          return this.apiPath;
-        } else {
-          this.apiPath = this.apiPath + this.queryParams[0];
-          return this.apiPath;
-        }
-
-      case 2:
-        if (this.CheckStringForDoubleQueryParams(this.filter))
-        {
-          this.APIPathConcat(tempApiPath);
-          return this.apiPath;
-        } else {
-          this.apiPath = this.apiPath + this.queryParams[1];
-          return this.apiPath;
-        }
-      case 3:
-        if (this.CheckStringForDoubleQueryParams(this.filter))
-          {
-            this.APIPathConcat(tempApiPath);
-            return this.apiPath;
-          } else {
-          this.apiPath = this.apiPath + this.queryParams[2];
-          return this.apiPath;
-          };
-
-      case 4:
-        if (this.CheckStringForDoubleQueryParams(this.filter))
-          {
-            this.APIPathConcat(tempApiPath);
-            return this.apiPath;
-          } else {
-          this.apiPath = this.apiPath + this.queryParams[3];
-          return this.apiPath;
-          }
-
-      default:      
+    } else {
+        this.APIpathCheckingForDuplicateParamsAndConcat(this.filter, tempApiPath);
         return this.apiPath;
     }
   }
@@ -187,14 +150,16 @@ export class BeerService {
     this.apiPath = this.apiPath.replace(this.queryParams[this.filter - 1], "");
   }
 
-  // Function that will be used to refactor APIpath()
-  private UnholyFunctionOfDoom(filter: number){
-    let tempApiPath = `${this.path}?page=${this.page}&per_page=`;
+  // Checks for duplicate params to not query API twice and if no duplicates then add from queryParams to apiPath
+  // queryParams = [ '&abv_gt=5', '&abv_lt=5', '&ibu_gt=50', '&ibu_lt=50'];
+  private APIpathCheckingForDuplicateParamsAndConcat(filter: number, tempApiPath: string){
     if (this.CheckStringForDoubleQueryParams(filter))
     {
       this.APIPathConcat(tempApiPath);
+      return this.apiPath;
     } else {
-          this.apiPath = this.apiPath + this.queryParams[1];
+      this.apiPath = this.apiPath + this.queryParams[filter - 1];
+      return this.apiPath;
     }
   }
 
