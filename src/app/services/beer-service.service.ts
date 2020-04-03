@@ -120,7 +120,7 @@ export class BeerService {
         return this.apiPath;
 
       case 1:
-        if (this.CheckStringForQueryParams(this.filter))
+        if (this.CheckStringForDoubleQueryParams(this.filter))
         {
           this.APIPathConcat(tempApiPath);
           return this.apiPath;
@@ -130,7 +130,7 @@ export class BeerService {
         }
 
       case 2:
-        if (this.CheckStringForQueryParams(this.filter))
+        if (this.CheckStringForDoubleQueryParams(this.filter))
         {
           this.APIPathConcat(tempApiPath);
           return this.apiPath;
@@ -139,7 +139,7 @@ export class BeerService {
           return this.apiPath;
         }
       case 3:
-        if (this.CheckStringForQueryParams(this.filter))
+        if (this.CheckStringForDoubleQueryParams(this.filter))
           {
             this.APIPathConcat(tempApiPath);
             return this.apiPath;
@@ -149,7 +149,7 @@ export class BeerService {
           };
 
       case 4:
-        if (this.CheckStringForQueryParams(this.filter))
+        if (this.CheckStringForDoubleQueryParams(this.filter))
           {
             this.APIPathConcat(tempApiPath);
             return this.apiPath;
@@ -163,24 +163,26 @@ export class BeerService {
     }
   }
 
-  // Removing query params from APIPath string -- Removing filter minus 101 to align with queryParams Array
+  // Removing query params from APIPath string -- Removing filter to align with the queryParams Array
   private APIPathRemove(): string {
     this.RemoveFilterBasedOnFilterNumber(this.filter);
     return this.apiPath;
   }
 
-  // Concat together apiPath string based on per_page= then add on substring after number per page.
+  // Concat together apiPath string based on index of 'per_page=' then add on substring after number has been added
   private APIPathConcat(tempApiPath: string) {
     let indexOfPage = this.apiPath.indexOf('per_page=');
         this.apiPath = tempApiPath + this.maxPerLoad + this.apiPath.substring(indexOfPage + 11, this.apiPath.length);
   }
 
   // This checks for the filter based on the index of queryParams which is offset by one of filter
-  private CheckStringForQueryParams(filter: number) : boolean {
+  // queryParams = [ '&abv_gt=5', '&abv_lt=5', '&ibu_gt=50', '&ibu_lt=50'];
+  private CheckStringForDoubleQueryParams(filter: number) : boolean {
       return this.apiPath.includes(this.queryParams[filter - 1]);
     }
 
   // Removes filter based on filter input in correlation to queryParams
+  // queryParams = [ '&abv_gt=5', '&abv_lt=5', '&ibu_gt=50', '&ibu_lt=50'];
   private RemoveFilterBasedOnFilterNumber(filter: number) {
     this.apiPath = this.apiPath.replace(this.queryParams[this.filter - 1], "");
   }
@@ -188,7 +190,7 @@ export class BeerService {
   // Function that will be used to refactor APIpath()
   private UnholyFunctionOfDoom(filter: number){
     let tempApiPath = `${this.path}?page=${this.page}&per_page=`;
-    if (this.CheckStringForQueryParams(filter))
+    if (this.CheckStringForDoubleQueryParams(filter))
     {
       this.APIPathConcat(tempApiPath);
     } else {

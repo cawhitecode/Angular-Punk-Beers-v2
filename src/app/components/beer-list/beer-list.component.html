@@ -1,7 +1,11 @@
 <app-beer-filters #filters></app-beer-filters>
 <div *ngIf="(beers$ | async)?.length > 0; else noBeers">
   <div class="row mx-auto">
-    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12" *ngFor="let beer of beers$ | async">
+    <div class="col-1">
+    </div>
+      <div class="col-10">        
+        <div class="row mx-auto">
+        <div class="col-xl-4 col-lg-6 col-md-8 col-sm-10 mx-auto" *ngFor="let beer of beers$ | async">
       <div class="wrapper">
       <div class="card">
         <div class="front">
@@ -23,8 +27,12 @@
       </div>
     </div>    
     </div>
+      </div>
   </div>
+  <div class="col-1">
+    </div>
   <app-infinite-scroll></app-infinite-scroll>
+</div>
 </div>
 <ng-template #noBeers>
   <app-beer-empty [filters]="filters"></app-beer-empty>
