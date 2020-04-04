@@ -14,6 +14,8 @@
         <div class="right">
           <h5>{{ beer.tagline }}</h5>
           <ul>
+            <app-beer-modal-more-info [beerID]="beer.id"></app-beer-modal-more-info>
+            <li>{{ beer.id }}</li>
             <li>ABV: {{ beer.abv }}% </li>
             <li>IBU: {{ beer.ibu }}</li>
             <li>EBC: {{ beer.ebc }}</li>

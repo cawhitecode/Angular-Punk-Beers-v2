@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, Observable, merge, interval  } from "rxjs";
 import { take } from 'rxjs/operators';
 import {concat} from "rxjs/observable/concat";
+import 'rxjs/add/operator/map';
 
 export interface Beer {
   abv: number;
@@ -14,6 +15,7 @@ export interface Beer {
   first_brewed: string;
   image_url: string;
   tageline: string;
+  id: number;
 }
 
 export class BeerFiltersSettings {
@@ -64,6 +66,7 @@ export class BeerService {
     this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
   }
 
+
   // Loads More Beer by adding 12 until max of 72 beers
   nextBeerLoad(): void {
     if (this.maxPerLoad == 72){
@@ -73,6 +76,13 @@ export class BeerService {
       this.maxPerLoad = this.maxPerLoad + 12;
       this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
     }
+  }
+
+  loadBeerByID(id: number){
+    let beerID = "/" + id.toString();
+    let tempApiPath =  this.http.get(`${this.path}${beerID}`)
+      .map((res: Response) => res.json());
+      return tempApiPath;
   }
 
   // Resets filter to 0 and by APIpath resets query string
