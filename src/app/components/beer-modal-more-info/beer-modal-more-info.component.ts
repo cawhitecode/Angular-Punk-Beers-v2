@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Beer } from '../../services/beer-service.service';
 
 import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import { BeerService } from '../../services/beer-service.service';
+
 
 @Component({
   selector: 'app-beer-modal-more-info',
@@ -11,9 +11,10 @@ import { BeerService } from '../../services/beer-service.service';
 })
 export class BeerModalMoreInfoComponent  {
   @Input()
+  // Beer from beers$ service array but comes from beer-list as Beer
     beer: Beer;
 
-  constructor(private modalService: NgbModal, private beerService: BeerService) {}
+  constructor(private modalService: NgbModal) {}
 
   open(content) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'})    
