@@ -16,6 +16,8 @@ export interface Beer {
   image_url: string;
   tageline: string;
   id: number;
+  description: string;
+  food_pairing: Array<string>;
 }
 
 export class BeerFiltersSettings {
@@ -76,13 +78,6 @@ export class BeerService {
       this.maxPerLoad = this.maxPerLoad + 12;
       this.http.get<Beer[]>(this.APIPath()).subscribe(v => this.beers.next(v));
     }
-  }
-
-  loadBeerByID(id: number){
-    let beerID = "/" + id.toString();
-    let tempApiPath =  this.http.get(`${this.path}${beerID}`)
-      .map((res: Response) => res.json());
-      return tempApiPath;
   }
 
   // Resets filter to 0 and by APIpath resets query string

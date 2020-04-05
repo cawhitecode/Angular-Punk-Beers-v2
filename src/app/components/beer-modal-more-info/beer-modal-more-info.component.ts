@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Beer } from '../../services/beer-service.service';
 
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { BeerService } from '../../services/beer-service.service';
 
 @Component({
@@ -10,14 +11,12 @@ import { BeerService } from '../../services/beer-service.service';
 })
 export class BeerModalMoreInfoComponent  {
   @Input()
-    beerID: number;
+    beer: Beer;
 
   constructor(private modalService: NgbModal, private beerService: BeerService) {}
 
   open(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'})
-    console.log(this.beerID);
-    this.beerService.loadBeerByID(this.beerID);
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'})    
     
   }
 }

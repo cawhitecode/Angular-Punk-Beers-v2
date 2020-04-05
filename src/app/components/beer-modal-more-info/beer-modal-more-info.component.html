@@ -1,15 +1,19 @@
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">More Info:</h4>
+    <h3 class="modal-title" id="modal-basic-title">{{ beer.name }}</h3>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">close</span>
     </button>
   </div>
   <div class="modal-body">
-    
-  </div>
-  <div class="modal-footer">
+    <h4>{{ beer.tagline }}</h4>
+    <p>{{beer.description}}</p>
+    <hr>
+    <h5>Food Pairings</h5>
+    <li>{{beer.food_pairing[0]}}</li>
+    <li>{{beer.food_pairing[1]}}</li>
+    <li>{{beer.food_pairing[2]}}</li>    
   </div>
 </ng-template>
 
-<button class="btn btn-lg btn btn-outline-dark" (click)="open(content)">beer</button>
+<button class="btn btn-sm btn-outline-dark" (click)="open(content)">More Info</button>

@@ -13,15 +13,20 @@
         </div>
         <div class="right">
           <h5>{{ beer.tagline }}</h5>
-          <ul>
-            <app-beer-modal-more-info [beerID]="beer.id"></app-beer-modal-more-info>
-            <li>{{ beer.id }}</li>
-            <li>ABV: {{ beer.abv }}% </li>
-            <li>IBU: {{ beer.ibu }}</li>
-            <li>EBC: {{ beer.ebc }}</li>
-            <li>PH: {{ beer.ph }}</li>
-            <li>First Brewed: {{ beer.first_brewed}}</li>
-          </ul>
+            <div class="row mx-auto">
+              <div class="col-7">
+                <ul>
+                <li>ABV: {{ beer.abv }}% </li>
+                <li>IBU: {{ beer.ibu }}</li>
+                <li>EBC: {{ beer.ebc }}</li>
+                <li>PH: {{ beer.ph }}</li>
+                <li>First Brewed: {{ beer.first_brewed}}</li>
+                </ul>
+              </div>
+               <div class="col-5">
+                 <app-beer-modal-more-info [beer]="beer"></app-beer-modal-more-info>
+               </div>
+            </div>
         </div>
       </div>
       <div class="img-wrapper">
