@@ -4,7 +4,18 @@ Punk API beers is a front end application to show case UI using beer
 
 ## Usage
 
+
+
 The main use of this project is to showcase different UI/UX changes on the frontend with different versions and styles.
+### version 3-0: https://angular-punkapibeers-v3-0.stackblitz.io
+
+- Changed UI to showcase static and modern feel
+- Updated a lot of css/background colors
+
+### version 2-2: https://angular-punkapibeers-v2-2.stackblitz.io
+
+- Added to the top button
+- Added clarity to with comments
 
 ### Version 2-1: https://angular-punkapibeers-v2-1.stackblitz.io
 
