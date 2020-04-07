@@ -16,6 +16,7 @@ import { BeerListComponent } from './components/beer-list/beer-list.component';
 import { BeerEmptyComponent } from './components/beer-empty/beer-empty.component';
 import { BeerFiltersComponent } from './components/beer-filters/beer-filters.component';
 import { BeerModalMoreInfoComponent } from './components/beer-modal-more-info/beer-modal-more-info.component';
+import { GoToTopComponent } from './components/go-to-top/go-to-top.component';
 
 
 
@@ -23,7 +24,7 @@ import { BeerModalMoreInfoComponent } from './components/beer-modal-more-info/be
 
 @NgModule({
   imports:      [ HttpClientModule, BrowserModule, FormsModule, NgMultiSelectDropDownModule.forRoot(), InfiniteScrollModule, NgbModule ],
-  declarations: [ AppComponent, BeerComponent, BeerListComponent, BeerEmptyComponent, BeerFiltersComponent, InfiniteScrollComponent, BeerModalMoreInfoComponent ],
+  declarations: [ AppComponent, BeerComponent, BeerListComponent, BeerEmptyComponent, BeerFiltersComponent, InfiniteScrollComponent, BeerModalMoreInfoComponent, GoToTopComponent ],
   bootstrap:    [ AppComponent ],
   providers: [BeerService]
 })
