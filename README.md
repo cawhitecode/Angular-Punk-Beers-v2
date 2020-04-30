@@ -11,6 +11,7 @@ The main use of this project is to showcase different UI/UX changes on the front
   
   - #### Grey Scale: https://angular-punkapibeers-v3-0-greyscale.stackblitz.io
   - #### Vending Modern: https://angular-punkapibeers-v3-0-vending.stackblitz.io
+  - #### Github: https://github.com/cawhitecode/angular-punkapibeers-v3
 
 
 - Changed UI to showcase static and modern feel
